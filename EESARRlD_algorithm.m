@@ -38,24 +38,64 @@ n=number_of_tasks;
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% task rearange and blocks
    block_number_for_task=zeros(1,n);
-  
+   task_status =zeros(1,n);
+   counter =0;
+   while( counter < n)
    for i=1:1:n
-      if(sum(M(:,i))==0)
-              block_number_for_task(i)=1; 
+       max_level=1;
+      if(sum(M(:,i))==0 &&  task_status(i)==0)
+              block_number_for_task(i)=1;
+              task_status(i)=1;
+               counter =  counter + 1;
+               disp('task level for task');
+                   disp(i);
+                   disp('is');
+                   disp( block_number_for_task(i));
+             
       else
-          for j=1:1:i-1
-             if (M(j,i)==1 && block_number_for_task(j)~=0)
-                  block_number_for_task(i)=block_number_for_task(j)+1;
+          task_can_be_assigned =1;
+          for j=1:1:n
+             if (M(j,i)==1 && block_number_for_task(j)== 0 &&  task_status(j)==0)  
+              task_can_be_assigned =0;
              end
+          end 
+         if (task_can_be_assigned == 1 && task_status(i)==0)
+          for j=1:1:n
+             if (M(j,i)==1 && block_number_for_task(j)~= 0 &&  task_status(j)==1 )
+                 x= block_number_for_task(j)+1;
+                 if x > max_level
+                      max_level = x; 
+                 end
+                     block_number_for_task(i) = max_level;
+                  
+                    
+             end 
+             
           end
+          task_status(i)=1;
+                   counter =  counter + 1;
+                   disp('task level for task');
+                   disp(i);
+                   disp('is');
+                   disp( block_number_for_task(i));
+                   %disp('counter is');
+                   %disp(counter);
+         end
+          
+                    
       end
+      
+                    
+                   
+                    
+                    
    end
-  
+   end 
    
+                     
    
-   
-   %disp('level number for task');
-   %disp(block_number_for_task);
+   disp('level number for task');
+   disp(block_number_for_task);
   
   number_of_blocks=max(block_number_for_task);
  % disp(' number_of_level');
